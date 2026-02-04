@@ -1,10 +1,26 @@
 package com.ebac.sprinboot.dto;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="autores")
 public class Author {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String name;
     private String lastName;
     private String biography;
     private String mostFamousTitle;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

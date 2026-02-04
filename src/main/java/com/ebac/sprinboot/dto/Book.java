@@ -1,10 +1,25 @@
 package com.ebac.sprinboot.dto;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="libros")
 public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String title;
     private String authorName;
-    private int year;
+    private int publicationYear;
     private String isbn;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -22,12 +37,12 @@ public class Book {
         this.authorName = authorName;
     }
 
-    public int getYear() {
-        return year;
+    public int getPublicationYear() {
+        return publicationYear;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setPublicationYear(int publicationYear) {
+        this.publicationYear = publicationYear;
     }
 
     public String getIsbn() {
