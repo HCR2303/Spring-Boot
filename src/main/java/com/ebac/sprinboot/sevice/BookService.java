@@ -24,8 +24,8 @@ public class BookService {
         return booksRepository.findAll();
     }
 
-    public Book UpdateBook(Book book) {
-        return booksRepository.save(book);
+    public void UpdateBook(Book book) {
+        booksRepository.save(book);
     }
 
     public void DeleteBook(int id) {
