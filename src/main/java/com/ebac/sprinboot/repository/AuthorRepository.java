@@ -1,4 +1,4 @@
-package com.ebac.sprinboot.sevice;
+package com.ebac.sprinboot.repository;
 
 import com.ebac.sprinboot.dto.Author;
 import org.springframework.data.jpa.repository.JpaRepository;

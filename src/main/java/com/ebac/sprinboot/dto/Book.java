@@ -1,55 +1,32 @@
 package com.ebac.sprinboot.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Data;
 
+import java.util.List;
+
+@Data
 @Entity
 @Table(name="libros")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int idBook;
+
     private String title;
-    private String authorName;
     private int publicationYear;
     private String isbn;
 
-    public int getId() {
-        return id;
-    }
+    @ManyToMany(mappedBy = "borrowedBooks")
+    @JsonIgnore
+    private List<User> users;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "idAuthor")
+    @JsonBackReference
+    private Author author;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
-
-    public int getPublicationYear() {
-        return publicationYear;
-    }
-
-    public void setPublicationYear(int publicationYear) {
-        this.publicationYear = publicationYear;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
 }

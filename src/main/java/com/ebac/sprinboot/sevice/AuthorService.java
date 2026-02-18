@@ -1,6 +1,7 @@
 package com.ebac.sprinboot.sevice;
 
 import com.ebac.sprinboot.dto.Author;
+import com.ebac.sprinboot.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

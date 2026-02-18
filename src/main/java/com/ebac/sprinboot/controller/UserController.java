@@ -2,6 +2,7 @@ package com.ebac.sprinboot.controller;
 
 import com.ebac.sprinboot.dto.User;
 import com.ebac.sprinboot.sevice.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @RestController
 public class UserController {
 
@@ -19,37 +20,62 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/usuarios")
-    public List<User> getUsers() {
-        return userService.getAllUsers();
+    public ResponseWrapper< List<User>> getUsers() {
+        ResponseEntity<List<User>> usuarios=ResponseEntity.ok(userService.getAllUsers());
+        if  (usuarios.getBody().size()>0){
+            return new ResponseWrapper<>(true,"Se obtuvo lista de users",usuarios);
+        }else{
+            return new ResponseWrapper<>(false,"No existen usuarios", usuarios);
+        }
+
     }
 
     @GetMapping("/usuarios/{id}")
-    public ResponseEntity<User> getUser(@PathVariable int id) {
+    public ResponseWrapper<User> getUser(@PathVariable int id) {
         Optional<User> userFound= userService.getById(id);
-        return userFound.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
+        if (userFound.isPresent()) {
+            log.info("Obteniendo usuario {}", userFound.get().getName());
+            ResponseEntity<User> RE= ResponseEntity.ok(userFound.get());
+            return new ResponseWrapper<>(true,"Se obteniendo usuario",RE);
+        }else {
+            log.warn("Buscando ID:{}", id);
+            ResponseEntity<User> RE= ResponseEntity.notFound().build();
+            return new ResponseWrapper<>(false,"No se encontro el usuario",RE);
+        }
     }
 
     @PostMapping("/usuarios")
-    public ResponseEntity<User> createUser(@RequestBody User user) throws URISyntaxException {
+    public ResponseWrapper<User> createUser(@RequestBody User user) throws URISyntaxException {
         userService.CreateUser(user);
-        return ResponseEntity.created(new URI("/usuarios")).build();
+        String name= user.getName();
+        log.info("Creando usuario {}", name);
+        ResponseEntity<User> userRE= ResponseEntity.created(new URI("/usuarios")).build();
+        return new ResponseWrapper<>(true,"Se creo usuario" + name, userRE);
     }
 
     @PutMapping("/usuarios/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user) {
+    public ResponseWrapper<User> updateUser(@PathVariable int id, @RequestBody User user) {
         Optional<User> userFound= userService.getById(id);
+
         if(userFound.isPresent()){
-            user.setId(userFound.get().getId());
+            user.setIdUsuario(userFound.get().getIdUsuario());
             userService.UpdateUser(user);
-            return ResponseEntity.ok(user);
+            log.info("Actualizando usuario {}", user.getName());
+            ResponseEntity<User> RE= ResponseEntity.ok(user);
+            return new ResponseWrapper<>(true,"Usuario actualizado",RE);
         }else{
-            return ResponseEntity.notFound().build();
+            log.warn("No se pudo actualizar el usuario con ID:{}",id);
+            ResponseEntity<User> RE= ResponseEntity.notFound().build();
+            return new ResponseWrapper<>(false,"Usuario no encontrado",RE);
         }
     }
 
     @DeleteMapping("/usuarios/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable int id) {
+    public ResponseWrapper<Void> deleteUser(@PathVariable int id) {
         userService.DeleteUser(id);
-        return ResponseEntity.noContent().build();
+        log.info("Eliminando usuario ID:{}", id);
+        ResponseEntity<Void> RE= ResponseEntity.noContent().build();
+        return new ResponseWrapper<>(true,"Usuario eliminado",RE);
     }
 }

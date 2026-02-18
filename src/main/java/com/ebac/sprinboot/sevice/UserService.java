@@ -1,6 +1,7 @@
 package com.ebac.sprinboot.sevice;
 
 import com.ebac.sprinboot.dto.User;
+import com.ebac.sprinboot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,8 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    /*En esta sección de servicio se deben de colocar la validaciones de negocio para
+    cada métod0 utilizado de la implementación de la interfaz de repositorio (SAVE, UPDATE, FINDBYID, ...)*/
     public User CreateUser(User user) {
         return userRepository.save(user);
     }

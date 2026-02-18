@@ -1,0 +1,46 @@
+<configuration>
+
+    <appender name="CONSOLA_HCR" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{"dd-MM-yyyy HH:mm:ss,SSSXXX", "America/Mexico_City"} [%t] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <!--Directiva para Guardado de archivo-->
+    <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--Donde se guardará el archivo creado para los LOG's-->
+        <file>logs/LogeadasModulo65.log</file>
+        <!--Directiva para no llenar de archivos basura la carpeta de los LOG's-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--Los archivos se formarán y clasificarán en subcarpetas con fecha-->
+            <fileNamePattern>logs/archived/app.%d{dd-MM-yyyy}.%i.log</fileNamePattern>
+            <!--Solo se permite un límite de archivos con un peso de 2Mb-->
+            <maxFileSize>2MB</maxFileSize>
+            <!--El total de archivos solo serán 5 de 2Mb por el límite de carpeta (10Mb)-->
+            <totalSizeCap>10MB</totalSizeCap>
+            <!--Ya que cambian por fecha se establece un límite de 5 archivos de cualquier peso-->
+            <maxHistory>5</maxHistory>
+            <!--Al ser una política recursiva esto se mantiene -->
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>
+                %d{"dd-MM-yyyy HH:mm:ss,SSSXXX", "America/Mexico_City"} [%t] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+
+    </appender>
+
+
+    <logger name="com.ebac.sprinboot" level="info" additivity="false">
+        <appender-ref ref="CONSOLA_HCR" />
+        <appender-ref ref="FILE-ROLLING" />
+    </logger>
+
+    <root level="error">
+        <appender-ref ref="CONSOLA_HCR" />
+        <appender-ref ref="FILE-ROLLING" />
+    </root>
+
+</configuration>
