@@ -25,8 +25,8 @@ public class AuthorService {
         return authorRepository.findAll();
     }
 
-    public Author UpdateAuthor(Author author) {
-        return authorRepository.save(author);
+    public void UpdateAuthor(Author author) {
+        authorRepository.save(author);
     }
 
     public void DeleteAuthor(int id) {

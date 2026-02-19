@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Slf4j
@@ -22,7 +23,7 @@ public class BookController {
     @GetMapping("/libros")
     public ResponseWrapper<List<Book>> getBooks() {
         ResponseEntity<List<Book>> RE= ResponseEntity.ok(bookService.getAllBooks());
-        if (bookService.getAllBooks().size()>0){
+        if (RE.getBody().size()>0){
             return new ResponseWrapper<>(true,"Se obtuvo lista de books",RE);
         }else{
             return new ResponseWrapper<>(false,"No existen libros",RE);
